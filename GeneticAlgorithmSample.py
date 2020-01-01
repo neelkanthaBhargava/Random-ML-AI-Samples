@@ -13,7 +13,7 @@ def generate_testset():
 
 # generate equivalent x values for fitness function
 def getEquiVal(chromosome, start = 0, end = math.pi):
-  fraction = chromosome/(2**11)
+  fraction = float(chromosome)/(2**11)
   return start+fraction*(end-start)
   
 # generate equivalent x values
