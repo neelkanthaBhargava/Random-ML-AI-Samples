@@ -12,27 +12,27 @@ def generate_testset():
   return x
 
 # generate equivalent x values for fitness function
-def getEquiVal(chromosome, start = 0, end = math.pi):
+def getEquiVal(chromosome, start = 0, end = 2 * math.pi):
   fraction = float(chromosome)/(2**11)
   return start+fraction*(end-start)
   
 # generate equivalent x values
-def getEquiMatrix(chromosomes, start = 0, end = math.pi):
+def getEquiMatrix(chromosomes, start = 0, end = 2 * math.pi):
   x = [getEquiVal(chromosome,start,end) for chromosome in chromosomes]
   return x
 
 # find fitness values for complete matrix
-def fitnessMatrix(chromosomes, start = 0, end = math.pi):
+def fitnessMatrix(chromosomes, start = 0, end = 2 * math.pi):
   x = getEquiMatrix(chromosomes, start, end)
   fitness = [math.sin(xi) for xi in x]
   return fitness
 
 # fitness Function
-def fitnessFunction(chromosome, start = 0, end = math.pi):
+def fitnessFunction(chromosome, start = 0, end = 2 * math.pi):
   return math.sin(getEquiVal(chromosome,start,end))
 
 # selection function
-def selection(chromosomes, ran, start = 0, end = math.pi, maximize = False):
+def selection(chromosomes, ran, start = 0, end = 2 * math.pi, maximize = False):
   sorted_chromosomes = sorted(chromosomes, key = fitnessFunction,reverse=maximize)
   return sorted_chromosomes[:ran]
 
@@ -65,7 +65,7 @@ def print_fitness(population):
   return
 
 # GA Algo implemented
-def ga_algo(generation=10):
+def ga_algo(generation=10,maximize=True):
   generation_results = []
   initialPop = generate_testset()
   print('initial population - ')
@@ -76,7 +76,7 @@ def ga_algo(generation=10):
 
     # Selection
     #
-    selected_population = selection(initialPop,8,maximize = True)
+    selected_population = selection(initialPop,8,maximize)
     print('Selected Values - ')
     print_fitness(selected_population)
     print()
@@ -99,7 +99,7 @@ def ga_algo(generation=10):
     #
     initialPop.extend(crossover_population)
     initialPop.extend(mutated_population)
-    initialPop = selection(initialPop,10,maximize = True)
+    initialPop = selection(initialPop,10,maximize)
     print('Final Population - ')
     print_fitness(initialPop)
     print()
@@ -108,30 +108,12 @@ def ga_algo(generation=10):
     #
     print('Max value at-')
     print_fitness(initialPop[0:1])
-    generation_results.append(fitnessFunction(initialPop[0]))
+    generation_results.append((getEquiVal(initialPop[0]),fitnessFunction(initialPop[0])))
     print()
   return generation_results
   
 def main():
-##  initialPop = generate_testset()
-##  print('initial population - ',initialPop)
-##  print()
-##  print('equivalent values - ',getEquiVal(initialPop[0]))
-##  print()
-##  print('Equivalent Matrix - ',getEquiMatrix(initialPop))
-##  print()
-##  print('Fitness Matrix - ',fitnessMatrix(initialPop))
-##  print()
-##  selected_population = selection(initialPop,8,maximize = True)
-##  print('Selected Values - ', selected_population)
-##  print()
-##  crossover_population = crossover(selected_population)
-##  print('Crossover Child Population',crossover_population)
-##  print()
-##  mutated_population = mutation(selected_population)
-##  print('Mutated Child Population',mutated_population)
-
-  results = ga_algo(30)
+  results = ga_algo(30,False)
   print(results)
 
 
